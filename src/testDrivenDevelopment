@@ -1,0 +1,55 @@
+medical services = new med....
+
+clinics
+List<Appointment>
+doctors
+patients
+
+clinic = new Clinic
+
+clinic.createDoctor -> name, speciality, email, phone
+clinic.createPatient -> name, disease, phone
+
+medicalServices management{
+    add Clinic
+    clinic addPatient
+    clinic addDoctor
+    clinic deletePatient
+    clinic deleteDoctor
+}
+patient managemment - select patient from phone number {
+    add disease
+    delete disease
+    clear all diseases
+    addAppointment {
+        ask for date
+        ask for doctor - if it's available verify the date in clinics appointments to see it has room
+        print clinics which have room
+        select clinic
+        ask for hour(print doctor's appointments on that day) so the appointment wont override the other ones
+        add appointment to patient, to doctor, to clinic
+            }
+    deleteAppointment by id
+    change phone number
+
+
+
+
+- selectDateTime, select Doctor(print available doctors),
+
+
+
+}
+
+clinic addCoffeeMachine
+
+
+manageClinic
+
+
+clinic addAppointment(){
+select patient
+select doctor
+select day&hour
+
+}
