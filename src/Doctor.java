@@ -44,10 +44,11 @@ public class Doctor {
         return doctorAppointments;
     }
 
-    void deleteAppointmentFromClinicAndPatient(Appointment appointment) {
+    void deleteAppointment(Appointment appointment) {
 
         appointment.getClinic().getClinicAppointments().remove(appointment);
         appointment.getPatient().getPatientAppointments().remove(appointment);
+        doctorAppointments.remove(appointment);
 
     }
 

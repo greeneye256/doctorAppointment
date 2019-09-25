@@ -66,7 +66,7 @@ public class Main {
                         if (doctor.getId() == idDoctorToDelete) {
                             for (Appointment appointment : doctor.getDoctorAppointments()
                             ) {
-                                doctor.deleteAppointmentFromClinicAndPatient(appointment);
+                                doctor.deleteAppointment(appointment);
                             }
 //                            for (Clinic clinic:medStar.getClinics()
 //                                 ) {
@@ -332,7 +332,7 @@ public class Main {
                                 for (Appointment appointment:patientToManage.getPatientAppointments()
                                      ) {
                                     if (appointment.getId() == idOfAppointmentToDelete){
-                                        appointment.getPatient().deleteAppointmentFromClinicAndDoctor(appointment);
+                                        appointment.getDoctor().deleteAppointment(appointment);
                                         break;
                                     }
                                 }

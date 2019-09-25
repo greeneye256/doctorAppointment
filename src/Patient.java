@@ -72,13 +72,6 @@ public class Patient {
         return true;
     }
 
-    void deleteAppointmentFromClinicAndDoctor(Appointment appointment) {
-
-        appointment.getClinic().getClinicAppointments().remove(appointment);
-        appointment.getDoctor().getDoctorAppointments().remove(appointment);
-
-    }
-
     void printDiseases() {
         if (diseases.size() == 0) {
             System.out.println("No disease.");
