@@ -35,7 +35,7 @@ public class Main {
         boolean stayInLoop = true;
         while (stayInLoop) {
             printChoicesForMedicalServices();
-            switch (readStringChoice(scanner, "[a-iA-IqQ]", "Enter your choice: ", "Wrong input!")) {
+            switch (readStringChoice(scanner, "[a-jA-JqQ]", "Enter your choice: ", "Wrong input!")) {
                 case "a":
                 case "A":
                     System.out.print("Enter doctor name: ");
@@ -66,16 +66,10 @@ public class Main {
                         if (doctor.getId() == idDoctorToDelete) {
                             for (Appointment appointment : doctor.getDoctorAppointments()
                             ) {
-                                doctor.deleteAppointment(appointment);
+                                appointment.getPatient().getPatientAppointments().remove(appointment);
+                                appointment.getClinic().getClinicAppointments().remove(appointment);
                             }
-//                            for (Clinic clinic:medStar.getClinics()
-//                                 ) {
-//                                clinic.getClinicAppointments().removeAll(doctor.getDoctorAppointments());
-//                            }
-//                            for (Patient patient:medStar.getPatients()
-//                                 ) {
-//                                patient.getPatientAppointments().removeAll(doctor.getDoctorAppointments());
-//                            }
+//
                             medStar.getDoctors().remove(doctor);
                             isDoctorDeleted = true;
                             break;
@@ -90,18 +84,24 @@ public class Main {
                 case "D":
                     medStar.printPatients();
                     int idPatientToDelete = chooseId(scanner, "Choose patient by id to delete it (will delete all appointments related to this patient): ", "Wrong input!");
+                    boolean isPatientDeleted = false;
                     for (Patient patient : medStar.getPatients()
                     ) {
                         if (patient.getId() == idPatientToDelete) {
                             for (Appointment appointment : patient.getPatientAppointments()
                             ) {
-                                patient.deleteAppointment(appointment.getId());
+                                appointment.getDoctor().getDoctorAppointments().remove(appointment);
+                                appointment.getClinic().getClinicAppointments().remove(appointment);
+
                             }
                             medStar.getPatients().remove(patient);
-                            return;
+                            isPatientDeleted = true;
+                            break;
                         }
                     }
-                    System.out.println("There is no patient with this id.");
+                    if (!isPatientDeleted){
+                        System.out.println("There is no patient with this id.");
+                    }
                     break;
                 case "e":
                 case "E":
@@ -348,6 +348,53 @@ public class Main {
                         }
                     }
                     break;
+                case "g":
+                case "G":
+
+
+                    medStar.printDoctors();
+                    Doctor doctorToManage = null;
+                    int idDoctorToManage = chooseId(scanner, "Choose the id of doctor you want to manage: ", "Wrong id!");
+                    for (Doctor doctor:medStar.getDoctors()
+                         ) {
+                        if (doctor.getId() == idDoctorToManage){
+                            doctorToManage = doctor;
+                            break;
+                        }
+                    }
+                    if (doctorToManage == null){
+                        System.out.println("No such id!");
+                        break;
+                    }
+
+                    boolean stayInDoctorManagement = true;
+                    while (stayInDoctorManagement){
+                        System.out.println(doctorToManage);
+                        printChoicesForDoctorManagement();
+                        String choiceForDoctorManagement = readStringChoice(scanner, "[aAbBqQ]", "Select action for doctor: ", "Wrong input.Must be a letter from choices above,");
+                        switch (choiceForDoctorManagement){
+                            case "a":
+                            case "A":
+                                doctorToManage.printAppointments();
+                                break;
+                            case "b":
+                            case "B":
+                                doctorToManage.printAppointments();
+                                int idOfAppointmentToDelete = chooseId(scanner, "Select the id of appointment you want to delete: ", "Wrong input!");
+                                for (Appointment appointment:doctorToManage.getDoctorAppointments()
+                                ) {
+                                    if (appointment.getId() == idOfAppointmentToDelete){
+                                        doctorToManage.deleteAppointment(appointment);
+                                        break;
+                                    }
+                                }
+                                break;
+                            case "q":
+                            case "Q":
+                                stayInDoctorManagement = false;
+                                break;
+                        }
+                    }
                 case "h":
                 case "H":
                     medStar.printDoctors();
@@ -383,6 +430,7 @@ public class Main {
         System.out.println("g) Manage doctor");
         System.out.println("h) Print doctors");
         System.out.println("i) Print patients");
+        System.out.println("j) Print clinics");
         System.out.println("q) Exit program");
         System.out.println();
     }
@@ -396,6 +444,15 @@ public class Main {
         System.out.println("e) Print appointments");
         System.out.println("q) Exit patient management");
         System.out.println();
+    }
+
+    private static void printChoicesForDoctorManagement(){
+        System.out.println();
+        System.out.println("a) Print appointments");
+        System.out.println("b) Delete appointments");
+        System.out.println("q) Quit doctor management");
+        System.out.println();
+
     }
 
     private static String readStringChoice(Scanner scanner, String regex, String choiceMessage, String errorMessage) {
