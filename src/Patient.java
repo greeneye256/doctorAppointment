@@ -10,7 +10,7 @@ public class Patient {
     private String name;
     private List<String> diseases = new ArrayList<>();
     private String phoneNumber;
-    private List<Appointment> patientAppointments;
+    private List<Appointment> patientAppointments = new ArrayList<>();
 
     public Patient(String name, String phoneNumber) {
         this.name = name;
@@ -65,11 +65,18 @@ public class Patient {
     boolean appointmentCanBeDone(LocalDateTime localDateTime){
         for (Appointment appointment:patientAppointments
              ) {
-            if (Duration.between(appointment.getLocalDateTime(),localDateTime).toMinutes()<60){
+            if (localDateTime.toLocalTime().isAfter(appointment.getLocalDateTime().toLocalTime().minusMinutes(60))&&localDateTime.toLocalTime().isBefore(appointment.getLocalDateTime().toLocalTime().plusMinutes(60))){
                 return false;
             }
         }
         return true;
+    }
+
+    void deleteAppointmentFromClinicAndDoctor(Appointment appointment) {
+
+        appointment.getClinic().getClinicAppointments().remove(appointment);
+        appointment.getDoctor().getDoctorAppointments().remove(appointment);
+
     }
 
     void printDiseases() {
@@ -78,7 +85,7 @@ public class Patient {
         }
         for (String disease : diseases
         ) {
-            System.out.print(" - " + disease + " - ");
+            System.out.println(disease);
         }
     }
 
@@ -109,8 +116,24 @@ public class Patient {
     @Override
     public String toString() {
 
-        String toStringPrint = "Patient[id = " + id + ", name = " + name + ", disease = ";
-        printDiseases();
-        return toStringPrint + ", phone number = " + phoneNumber + "]";
+        StringBuilder diseases = new StringBuilder();
+        int size = this.diseases.size();
+        int count = 1;
+        if (this.diseases.size() == 0){
+            diseases.append("no disease");
+        }else {
+            for (String disease:this.diseases
+                 ) {
+                if (size == count){
+                    diseases.append(disease);
+                }
+                else if (size > count){
+                    diseases.append(disease + ", ");
+                }
+                count++;
+
+            }
+        }
+        return "Patient[id = " + id + ", name = " + name + ", disease = [" + diseases.toString() + "], phone number = " + phoneNumber + "]";
     }
 }

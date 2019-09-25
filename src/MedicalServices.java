@@ -58,17 +58,17 @@ public class MedicalServices {
     return clinicsWithRoomOnDate;
     }
 
-    void printList(List<Object> list){
-        for (Object obj:list
-             ) {
-            System.out.println(obj);
-        }
-    }
-
     void printDoctors(){
         for (Doctor doctor:doctors
              ) {
             System.out.println(doctor);
+        }
+    }
+
+    void printClinics(){
+        for (Clinic clinic:clinics
+             ) {
+            System.out.println(clinic);
         }
     }
 
@@ -88,12 +88,14 @@ public class MedicalServices {
         }
         return null;
     }
+
     void createAppointment(Clinic clinic, Patient patient, Doctor doctor, LocalDate localDate, LocalTime localTime){
-        Appointment appointment = new Appointment(patient,doctor, LocalDateTime.of(localDate,localTime));
+        Appointment appointment = new Appointment(patient,doctor,clinic, LocalDateTime.of(localDate,localTime));
         clinic.getClinicAppointments().add(appointment);
         patient.getPatientAppointments().add(appointment);
         doctor.getDoctorAppointments().add(appointment);
     }
+
     void deletePatientAppointment(int id){
 
         for (Clinic clinic:clinics
@@ -106,5 +108,12 @@ public class MedicalServices {
                 }
             }
         }
+    }
+
+    void addDoctor(Doctor doctor){
+        this.doctors.add(doctor);
+    }
+    void addPatient(Patient patient){
+        this.patients.add(patient);
     }
 }

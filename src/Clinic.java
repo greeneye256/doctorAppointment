@@ -1,4 +1,6 @@
+import javax.swing.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Clinic {
@@ -8,12 +10,16 @@ public class Clinic {
     private String name;
     private boolean hasCoffee = false;
     private int capacity;
-    private List<Appointment> clinicAppointments;
+    private List<Appointment> clinicAppointments = new ArrayList<>();
 
     public Clinic(String name, int capacity) {
         this.name = name;
         this.capacity = capacity;
         this.id = ++countClinic;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean hasCoffee() {
@@ -40,19 +46,19 @@ public class Clinic {
 
     }
 
-    public List<Appointment> getClinicAppointments() {
+    List<Appointment> getClinicAppointments() {
         return clinicAppointments;
     }
 
-    public int getCapacity() {
+    int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
@@ -67,6 +73,25 @@ public class Clinic {
             }
         }
         System.out.println("No such appointment!");
+    }
+
+    void printAppointments(){
+        for (Appointment appointment:this.clinicAppointments
+             ) {
+            System.out.println(appointment);
+        }
+    }
+
+    List<Appointment> getAppointmentsOnDate(LocalDate date){
+
+        List<Appointment> appointmentsOnDate = new ArrayList<>();
+        for (Appointment appointment:clinicAppointments
+             ) {
+            if (appointment.getLocalDateTime().toLocalDate().equals(date)){
+                appointmentsOnDate.add(appointment);
+            }
+        }
+        return appointmentsOnDate;
     }
 
     @Override

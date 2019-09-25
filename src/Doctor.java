@@ -14,7 +14,7 @@ public class Doctor {
     private String email;
     private String phoneNumber;
     private List<Appointment> doctorAppointments = new ArrayList<>();
-    private int maxAppointments;
+    private int maxAppointments = 2;
 
     public Doctor(String name, String speciality, String email, String phoneNumber) {
         this.name = name;
@@ -22,6 +22,10 @@ public class Doctor {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.id = ++doctorCount;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setMaxAppointments(int maxAppointments) {
@@ -40,23 +44,17 @@ public class Doctor {
         return doctorAppointments;
     }
 
-    void deleteAppointment(int id){
-        for (Appointment appointment:doctorAppointments
-        ) {
-            if (appointment.getId() == id){
-                appointment.getClinic().getClinicAppointments().remove(appointment);
-                appointment.getPatient().getPatientAppointments().remove(appointment);
-                doctorAppointments.remove(appointment);
-                return;
-            }
-        }
-        System.out.println("No such appointment!");
+    void deleteAppointmentFromClinicAndPatient(Appointment appointment) {
+
+        appointment.getClinic().getClinicAppointments().remove(appointment);
+        appointment.getPatient().getPatientAppointments().remove(appointment);
+
     }
 
-    List<Appointment> getAppointmentsOnDate(LocalDate localDate){
+    List<Appointment> getAppointmentsOnDate(LocalDate localDate) {
         List<Appointment> appointmentsOnDate = new ArrayList<>();
-        for (Appointment appointment:doctorAppointments
-             ) {
+        for (Appointment appointment : doctorAppointments
+        ) {
             if (appointment.getLocalDateTime().toLocalDate().isEqual(localDate)) {
                 appointmentsOnDate.add(appointment);
             }
@@ -67,10 +65,10 @@ public class Doctor {
     //Verify if the doctor is available on a certain hour so appointment can be made. The distance between appointments
     // has to be minimum 60 minutes
 
-    boolean isAvailableOnHour(LocalDate localDate, LocalTime localTime){
-        for (Appointment appointment:getAppointmentsOnDate(localDate)
-             ) {
-            if (Duration.between(appointment.getLocalDateTime().toLocalTime(),localTime).toMinutes() < 60){
+    boolean isAvailableOnHour(LocalDate localDate, LocalTime localTime) {
+        for (Appointment appointment : getAppointmentsOnDate(localDate)
+        ) {
+            if (Duration.between(appointment.getLocalDateTime().toLocalTime(), localTime).toMinutes() < 60) {
                 return false;
             }
         }
@@ -82,17 +80,18 @@ public class Doctor {
     boolean isAvailableOnDate(LocalDate localDate) {
         List<Appointment> appointmentsOnDate = getAppointmentsOnDate(localDate);
         int numberOfCoffes = 0;
-        for (Appointment appointment:appointmentsOnDate
-             ) {
+        for (Appointment appointment : appointmentsOnDate
+        ) {
             if (appointment.getClinic().hasCoffee()) {
-                numberOfCoffes++;}
+                numberOfCoffes++;
+            }
         }
 
-        if (appointmentsOnDate.size() > 2) {
+        if (appointmentsOnDate.size() > maxAppointments) {
             return false;
         }
-        if (appointmentsOnDate.size() == 2) {
-            return  (appointmentsOnDate.size() == numberOfCoffes);
+        if (appointmentsOnDate.size() == maxAppointments) {
+            return (appointmentsOnDate.size() == numberOfCoffes);
         }
         return true;
     }

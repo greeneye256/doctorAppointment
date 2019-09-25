@@ -10,9 +10,10 @@ public class Appointment {
     private LocalDateTime localDateTime;
     private Clinic clinic;
 
-    public Appointment(Patient patient, Doctor doctor, LocalDateTime localDate) {
+    public Appointment(Patient patient, Doctor doctor, Clinic clinic, LocalDateTime localDate) {
         this.patient = patient;
         this.doctor = doctor;
+        this.clinic = clinic;
         this.localDateTime = localDate;
         this.id = ++countAppointments;
     }
@@ -37,5 +38,10 @@ public class Appointment {
 
     LocalDateTime getLocalDateTime() {
         return localDateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment[id = " + this.id + ", date = " + this.localDateTime.toString() + ", clinic = " + this.clinic.getName() + ", doctor = " + this.doctor.getName() + ", patient = " + this.patient.getName();
     }
 }
