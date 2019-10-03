@@ -1,3 +1,4 @@
+import javax.print.Doc;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,14 +20,14 @@ public class Main {
 
         addPatientsToClinic(medStar);
 
-        addAppointment(medStar.getPatients().get(0),medStar.getDoctors().get(0),small_clinic,LocalDateTime.of(2019,12,12,15,0));
-        addAppointment(medStar.getPatients().get(1),medStar.getDoctors().get(0),small_clinic,LocalDateTime.of(2019,10,22,18,0));
-        addAppointment(medStar.getPatients().get(3),medStar.getDoctors().get(5),big_clinic,LocalDateTime.of(2019,9,30,7,0));
-        addAppointment(medStar.getPatients().get(2),medStar.getDoctors().get(3),small_clinic,LocalDateTime.of(2019,11,12,15,0));
-        addAppointment(medStar.getPatients().get(4),medStar.getDoctors().get(2),big_clinic,LocalDateTime.of(2020,1,15,9,0));
-        addAppointment(medStar.getPatients().get(5),medStar.getDoctors().get(4),big_clinic,LocalDateTime.of(2020,2,17,19,0));
-        addAppointment(medStar.getPatients().get(6),medStar.getDoctors().get(1),small_clinic,LocalDateTime.of(2020,1,30,12,0));
-        addAppointment(medStar.getPatients().get(7),medStar.getDoctors().get(2),big_clinic,LocalDateTime.of(2019,11,13,13,0));
+        addAppointment(medStar.getPatients().get(0), medStar.getDoctors().get(0), small_clinic, LocalDateTime.of(2019, 12, 12, 15, 0));
+        addAppointment(medStar.getPatients().get(1), medStar.getDoctors().get(0), small_clinic, LocalDateTime.of(2019, 10, 22, 18, 0));
+        addAppointment(medStar.getPatients().get(3), medStar.getDoctors().get(5), big_clinic, LocalDateTime.of(2019, 9, 30, 7, 0));
+        addAppointment(medStar.getPatients().get(2), medStar.getDoctors().get(3), small_clinic, LocalDateTime.of(2019, 11, 12, 15, 0));
+        addAppointment(medStar.getPatients().get(4), medStar.getDoctors().get(2), big_clinic, LocalDateTime.of(2020, 1, 15, 9, 0));
+        addAppointment(medStar.getPatients().get(5), medStar.getDoctors().get(4), big_clinic, LocalDateTime.of(2020, 2, 17, 19, 0));
+        addAppointment(medStar.getPatients().get(6), medStar.getDoctors().get(1), small_clinic, LocalDateTime.of(2020, 1, 30, 12, 0));
+        addAppointment(medStar.getPatients().get(7), medStar.getDoctors().get(2), big_clinic, LocalDateTime.of(2019, 11, 13, 13, 0));
 
         Scanner scanner = new Scanner(System.in);
 
@@ -47,18 +48,18 @@ public class Main {
                 case "c":
                 case "C":
                     //Delete doctor and also all appointments in clinic and all patients appointments with this doctor
-                    Doctor doctorToDelete = selectDoctor(medStar,"delete", scanner);
-                    if (doctorToDelete == null){
+                    Doctor doctorToDelete = selectDoctor(medStar, "delete", scanner);
+                    if (doctorToDelete == null) {
                         break;
                     }
                     medStar.deleteDoctor(doctorToDelete);
                     break;
 
-                    //Delete a patient by id and all appointments related with this patient
+                //Delete a patient by id and all appointments related with this patient
                 case "d":
                 case "D":
                     Patient patientToDelete = selectPatient(medStar, "delete", scanner);
-                    if (patientToDelete == null){
+                    if (patientToDelete == null) {
                         break;
                     }
                     medStar.deletePatient(patientToDelete);
@@ -76,7 +77,7 @@ public class Main {
                     while (stayInClinicManagement) {
 
                         printChoicesForClinicManagement(clinicToManage);
-                        switch (readStringChoice(scanner, "[aAbBcCqQ]", "Make a choice for the clinic: ", "Wrong input!")){
+                        switch (readStringChoice(scanner, "[aAbBcCqQ]", "Make a choice for the clinic: ", "Wrong input!")) {
                             case "a":
                             case "A":
                                 clinicToManage.setCapacity(Integer.parseInt(readStringChoice(scanner, "^[1-9]\\d*$", "Input clinic new capacity (must be between 6 and 200): ", "Wrong input!")));
@@ -117,73 +118,53 @@ public class Main {
                                 break;
                             case "b":
                             case "B":
-                                patientToManage.removeDisease(diseaseToDelete(patientToManage,scanner));
+                                patientToManage.removeDisease(diseaseToDelete(patientToManage, scanner));
                                 break;
                             case "c":
                             case "C":
 
-                                Doctor doctorForAppointment = selectDoctor(medStar,"add to appointment",scanner);
+                                Doctor doctorForAppointment = selectDoctor(medStar, "add to appointment", scanner);
                                 if (doctorForAppointment == null) {
                                     break;
                                 }
-                                LocalDate dateForAppointment = dateForAppointment(doctorForAppointment,scanner);
-                                if (dateForAppointment == null){
+                                LocalDate dateForAppointment = dateForAppointment(doctorForAppointment, scanner);
+                                if (dateForAppointment == null) {
                                     break;
                                 }
 
-                                Clinic clinicForAppointment = selectClinic(clinicsAvailableOnDate(medStar, doctorForAppointment, dateForAppointment),"make an appointment for",scanner);
-                                List<Clinic> clinicsAvailableOnDate = clinicsAvailableOnDate(medStar,doctorForAppointment,dateForAppointment);
+                                Clinic clinicForAppointment = selectClinic(clinicsAvailableOnDate(medStar, doctorForAppointment, dateForAppointment), "make an appointment for", scanner);
+                                List<Clinic> clinicsAvailableOnDate = clinicsAvailableOnDate(medStar, doctorForAppointment, dateForAppointment);
 
-                                if (clinicForAppointment == null){
+                                if (clinicForAppointment == null) {
                                     break;
                                 }
 
-                                printDoctorAvailableHoursForAppointment(doctorForAppointment, dateForAppointment);
+                                LocalTime timeForAppointment = timeForAppointment(doctorForAppointment, dateForAppointment, scanner);
 
-
-                                System.out.print("Enter the time for your appointment in accordance with doctor schedule. (hh:mm): ");
-                                String time = scanner.nextLine() + ":00";
-                                if(!isTimeValid(time)){
-                                break;
+                                if (timeForAppointment == null) {
+                                    break;
                                 }
 
-                                LocalDateTime localDateTimeForAppointment = LocalDateTime.of(dateForAppointment,LocalTime.parse(time));
+                                LocalDateTime localDateTimeForAppointment = LocalDateTime.of(dateForAppointment, timeForAppointment);
 
-                                boolean isOccupied = false;
-
-                                if (!patientToManage.isFree(localDateTimeForAppointment)){
+                                if (!patientToManage.isFree(localDateTimeForAppointment)) {
                                     System.out.println("You already have an appointment on this interval!");
                                     break;
                                 }
-                                if (!doctorForAppointment.isFreeOnThisHour(localDateTimeForAppointment)){
+                                if (!doctorForAppointment.isFreeOnThisHour(localDateTimeForAppointment)) {
                                     System.out.println("Can't do appointment at this time. Doctor is occupied!");
                                     break;
                                 }
-                                for (Clinic clinic:clinicsAvailableOnDate
-                                     ) {
-                                    if (clinic.getAppointmentsOnDate(dateForAppointment) == null){
-                                        System.out.println(clinic + " - no appointments in this clinic yet");
-                                    }
-                                    else {
-                                        System.out.println(clinic + " - " + clinic.getAppointmentsOnDate(dateForAppointment).size() + " appointments on " + dateForAppointment + ".");
-                                    }
 
-                                }
+                                printClinicsAvailable(clinicsAvailableOnDate, dateForAppointment);
 
-                                int idOfClinic = chooseId(scanner,"Select clinic by id where you want to make the appointment: ","Wrong input!");
-                                Clinic appointmentClinic = null;
-                                for (Clinic clinic:clinicsAvailableOnDate
-                                     ) {
-                                    if (clinic.getId() == idOfClinic){
-                                        appointmentClinic = clinic;
-                                    }
-                                }
-                                if (appointmentClinic == null){
-                                    System.out.println("No such id for clinic!");
+                                Clinic appointmentClinic = selectClinic(clinicsAvailableOnDate, "for appointment", scanner);
+
+                                if (appointmentClinic == null) {
                                     break;
                                 }
 
-                                Appointment newAppointment = new Appointment(patientToManage,doctorForAppointment,appointmentClinic, LocalDateTime.of(dateForAppointment,LocalTime.parse(time)));
+                                Appointment newAppointment = new Appointment(patientToManage, doctorForAppointment, appointmentClinic, localDateTimeForAppointment);
                                 appointmentClinic.getClinicAppointments().add(newAppointment);
                                 patientToManage.getPatientAppointments().add(newAppointment);
                                 doctorForAppointment.getDoctorAppointments().add(newAppointment);
@@ -193,9 +174,9 @@ public class Main {
                             case "D":
                                 patientToManage.printAppointments();
                                 int idOfAppointmentToDelete = chooseId(scanner, "Select the id of appointment you want to delete: ", "Wrong input!");
-                                for (Appointment appointment:patientToManage.getPatientAppointments()
-                                     ) {
-                                    if (appointment.getId() == idOfAppointmentToDelete){
+                                for (Appointment appointment : patientToManage.getPatientAppointments()
+                                ) {
+                                    if (appointment.getId() == idOfAppointmentToDelete) {
                                         appointment.getDoctor().deleteAppointment(appointment);
                                         break;
                                     }
@@ -219,24 +200,24 @@ public class Main {
                     medStar.printDoctors();
                     Doctor doctorToManage = null;
                     int idDoctorToManage = chooseId(scanner, "Choose the id of doctor you want to manage: ", "Wrong id!");
-                    for (Doctor doctor:medStar.getDoctors()
-                         ) {
-                        if (doctor.getId() == idDoctorToManage){
+                    for (Doctor doctor : medStar.getDoctors()
+                    ) {
+                        if (doctor.getId() == idDoctorToManage) {
                             doctorToManage = doctor;
                             break;
                         }
                     }
-                    if (doctorToManage == null){
+                    if (doctorToManage == null) {
                         System.out.println("No such id!");
                         break;
                     }
 
                     boolean stayInDoctorManagement = true;
-                    while (stayInDoctorManagement){
+                    while (stayInDoctorManagement) {
                         System.out.println(doctorToManage);
                         printChoicesForDoctorManagement();
                         String choiceForDoctorManagement = readStringChoice(scanner, "[aAbBqQ]", "Select action for doctor: ", "Wrong input.Must be a letter from choices above,");
-                        switch (choiceForDoctorManagement){
+                        switch (choiceForDoctorManagement) {
                             case "a":
                             case "A":
                                 doctorToManage.printAppointments();
@@ -245,9 +226,9 @@ public class Main {
                             case "B":
                                 doctorToManage.printAppointments();
                                 int idOfAppointmentToDelete = chooseId(scanner, "Select the id of appointment you want to delete: ", "Wrong input!");
-                                for (Appointment appointment:doctorToManage.getDoctorAppointments()
+                                for (Appointment appointment : doctorToManage.getDoctorAppointments()
                                 ) {
-                                    if (appointment.getId() == idOfAppointmentToDelete){
+                                    if (appointment.getId() == idOfAppointmentToDelete) {
                                         doctorToManage.deleteAppointment(appointment);
                                         break;
                                     }
@@ -298,6 +279,7 @@ public class Main {
         System.out.println("q) Exit program");
         System.out.println();
     }
+
     private static void printChoicesForClinicManagement(Clinic clinic) {
         System.out.println(clinic);
         System.out.println();
@@ -324,10 +306,7 @@ public class Main {
         System.out.println();
     }
 
-    private static String startingHour = "06:00";
-    private static String endingHour = "21:00";
-
-    private static void printChoicesForDoctorManagement(){
+    private static void printChoicesForDoctorManagement() {
         System.out.println();
         System.out.println("a) Print appointments");
         System.out.println("b) Delete appointments");
@@ -368,7 +347,8 @@ public class Main {
                 return true;
             } else {
                 System.out.println("Must be within 6 months!");
-            }return false;
+            }
+            return false;
         } catch (Exception e) {
             System.out.println("Wrong input!");
             return false;
@@ -378,7 +358,7 @@ public class Main {
     private static boolean isTimeValid(String time) {
         try {
             LocalTime appointmentHour = LocalTime.parse(time);
-            if ((appointmentHour.isBefore(LocalTime.of(7,0)))||appointmentHour.isAfter(LocalTime.of(20,1))){
+            if ((appointmentHour.isBefore(LocalTime.of(7, 0))) || appointmentHour.isAfter(LocalTime.of(20, 1))) {
                 System.out.println("Must be between 7AM and 20PM!");
                 return false;
             }
@@ -389,7 +369,7 @@ public class Main {
         }
     }
 
-    private static void addDoctorsToClinic(MedicalServices medicalServices){
+    private static void addDoctorsToClinic(MedicalServices medicalServices) {
         medicalServices.addDoctor(new Doctor("Mihai Lucan", "urologie", "mihailucan@gmail.com", "0745344347"));
         medicalServices.addDoctor(new Doctor("Nadim Al Hajjar", "chirurgie generala", "nadimalhajjar@gmail.com", "0735889977"));
         medicalServices.addDoctor(new Doctor("Sorin Andreica", "neonatologie", "sorin_andreica@gmail.com", "0713453423"));
@@ -398,7 +378,7 @@ public class Main {
         medicalServices.addDoctor(new Doctor("Cosmina Tomescu", "hematologie", "cristinatomescu@gmail.com", "0756357468"));
     }
 
-    private static void addPatientsToClinic(MedicalServices medicalServices){
+    private static void addPatientsToClinic(MedicalServices medicalServices) {
         medicalServices.addPatient(new Patient("Anca Vasiliu", "0754345311"));
         medicalServices.addPatient(new Patient("Septimiu Avram", "0722434354"));
         medicalServices.addPatient(new Patient("George Apostol", "0766467259"));
@@ -410,14 +390,14 @@ public class Main {
         medicalServices.addPatient(new Patient("Florin Salam", "0786775663"));
     }
 
-    private static void addAppointment(Patient patient, Doctor doctor, Clinic clinic, LocalDateTime localDateTime){
-        Appointment newAppointment = new Appointment(patient,doctor,clinic,localDateTime);
+    private static void addAppointment(Patient patient, Doctor doctor, Clinic clinic, LocalDateTime localDateTime) {
+        Appointment newAppointment = new Appointment(patient, doctor, clinic, localDateTime);
         clinic.getClinicAppointments().add(newAppointment);
         patient.getPatientAppointments().add(newAppointment);
         doctor.getDoctorAppointments().add(newAppointment);
     }
 
-    private static Doctor createDoctorWithScanner(Scanner scanner){
+    private static Doctor createDoctorWithScanner(Scanner scanner) {
         System.out.print("Enter doctor name: ");
         String doctorName = scanner.nextLine();
         System.out.print("Enter speciality name: ");
@@ -427,19 +407,19 @@ public class Main {
         return new Doctor(doctorName, speciality, email, doctorPhoneNumber);
     }
 
-    private static Patient createPatientWithScanner(Scanner scanner){
+    private static Patient createPatientWithScanner(Scanner scanner) {
         System.out.print("Enter patient name: ");
         String patientName = scanner.nextLine();
         String patientPhoneNumber = readStringChoice(scanner, "\\d+", "Enter patient phone number: ", "Patient phone number have to contain only digits.");
         return new Patient(patientName, patientPhoneNumber);
     }
 
-    private static Doctor selectDoctor(MedicalServices medicalServices, String purpose, Scanner scanner){
+    private static Doctor selectDoctor(MedicalServices medicalServices, String purpose, Scanner scanner) {
         medicalServices.printDoctors();
         int idOfDoctorToSelect = chooseId(scanner, "Choose doctor by id to " + purpose + ": ", "Wrong input!");
-        for (Doctor doctor:medicalServices.getDoctors()
-             ) {
-            if (doctor.getId() == idOfDoctorToSelect){
+        for (Doctor doctor : medicalServices.getDoctors()
+        ) {
+            if (doctor.getId() == idOfDoctorToSelect) {
                 return doctor;
             }
         }
@@ -447,12 +427,12 @@ public class Main {
         return null;
     }
 
-    private static Patient selectPatient(MedicalServices medicalServices, String purpose, Scanner scanner){
+    private static Patient selectPatient(MedicalServices medicalServices, String purpose, Scanner scanner) {
         medicalServices.printPatients();
         int idOfPatientToSelect = chooseId(scanner, "Choose patient by id to " + purpose + " it: ", "Wrong input!");
-        for (Patient patient:medicalServices.getPatients()
-             ) {
-            if (patient.getId() == idOfPatientToSelect){
+        for (Patient patient : medicalServices.getPatients()
+        ) {
+            if (patient.getId() == idOfPatientToSelect) {
                 return patient;
             }
         }
@@ -460,19 +440,19 @@ public class Main {
         return null;
     }
 
-    private static Clinic selectClinic(List<Clinic> clinics, String purpose, Scanner scanner){
-        if (clinics.size() == 0){
+    private static Clinic selectClinic(List<Clinic> clinics, String purpose, Scanner scanner) {
+        if (clinics.size() == 0) {
             System.out.println("No clinics available!");
             return null;
         }
-        for (Clinic clinic:clinics
-             ) {
+        for (Clinic clinic : clinics
+        ) {
             System.out.println(clinic);
         }
         int idOfClinicToSelect = chooseId(scanner, "Choose a clinic by id to " + purpose + " it: ", "Wrong input!");
-        for (Clinic clinic:clinics
-             ) {
-            if (clinic.getId() == idOfClinicToSelect){
+        for (Clinic clinic : clinics
+        ) {
+            if (clinic.getId() == idOfClinicToSelect) {
                 return clinic;
             }
         }
@@ -480,18 +460,18 @@ public class Main {
         return null;
     }
 
-    private static String createDisease(Scanner scanner){
+    private static String createDisease(Scanner scanner) {
         System.out.print("Enter a disease!");
         return scanner.nextLine();
     }
 
-    private static String diseaseToDelete(Patient patient, Scanner scanner){
+    private static String diseaseToDelete(Patient patient, Scanner scanner) {
         patient.printDiseases();
         System.out.print("Type the disease you want to delete from patient medical record: ");
         return scanner.nextLine();
     }
 
-    private static LocalDate dateForAppointment(Doctor doctor, Scanner scanner){
+    private static LocalDate dateForAppointment(Doctor doctor, Scanner scanner) {
         System.out.print("Enter date of your appointment(yyyy-mm-dd). Must be between tomorrow and next 6 months: ");
         String inputDate = scanner.nextLine();
         if (!isDateValid(inputDate)) {
@@ -505,27 +485,29 @@ public class Main {
         return date;
     }
 
-    private static List<Clinic> clinicsAvailableOnDate(MedicalServices medicalServices, Doctor doctor, LocalDate localDate){
+    private static List<Clinic> clinicsAvailableOnDate(MedicalServices medicalServices, Doctor doctor, LocalDate localDate) {
         List<Clinic> cliniscAvailvableOnDate = new ArrayList<>();
-        for (Clinic clinic:medicalServices.getClinics()
-             ) {
-            if (clinic.isAvailableOnDate(doctor, localDate)){
+        for (Clinic clinic : medicalServices.getClinics()
+        ) {
+            if (clinic.isAvailableOnDate(doctor, localDate)) {
                 cliniscAvailvableOnDate.add(clinic);
             }
         }
-        if (cliniscAvailvableOnDate.size() == 0){
+        if (cliniscAvailvableOnDate.size() == 0) {
             System.out.println("Our clinics are full on " + localDate + ". Please try another day.");
         }
 
         return cliniscAvailvableOnDate;
     }
 
-    private static void printDoctorAvailableHoursForAppointment(Doctor doctor, LocalDate date){
+    private static void printDoctorAvailableHoursForAppointment(Doctor doctor, LocalDate date) {
         if (doctor.getAppointmentsOnDate(date).size() == 0) {
             System.out.println("Doctor is available between 7AM to 8PM.");
         } else {
             List<LocalTime> availableHours = new ArrayList<>();
+            String startingHour = "06:00";
             availableHours.add(LocalTime.parse(startingHour));
+            String endingHour = "21:00";
             availableHours.add(LocalTime.parse(endingHour));
 
             for (Appointment appointment : doctor.getAppointmentsOnDate(date)
@@ -546,5 +528,29 @@ public class Main {
                 }
             }
         }
+    }
+
+    private static LocalTime timeForAppointment(Doctor doctor, LocalDate date, Scanner scanner) {
+        printDoctorAvailableHoursForAppointment(doctor, date);
+
+        System.out.print("Enter the time for your appointment in accordance with doctor schedule. (hh:mm): ");
+        String time = scanner.nextLine() + ":00";
+        if (!isTimeValid(time)) {
+            return null;
+        }
+        return LocalTime.parse(time);
+    }
+
+    private static void printClinicsAvailable(List<Clinic> clinicsAvailableOnDate, LocalDate dateForAppointment) {
+        for (Clinic clinic : clinicsAvailableOnDate
+        ) {
+            if (clinic.getAppointmentsOnDate(dateForAppointment) == null) {
+                System.out.println(clinic + " - no appointments in this clinic yet");
+            } else {
+                System.out.println(clinic + " - " + clinic.getAppointmentsOnDate(dateForAppointment).size() + " appointments on " + dateForAppointment + ".");
+            }
+
+        }
+
     }
 }
