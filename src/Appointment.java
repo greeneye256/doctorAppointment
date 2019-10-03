@@ -1,4 +1,3 @@
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Appointment {
@@ -18,7 +17,7 @@ public class Appointment {
         this.id = ++countAppointments;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
@@ -26,11 +25,11 @@ public class Appointment {
         return clinic;
     }
 
-    public Doctor getDoctor() {
+    Doctor getDoctor() {
         return doctor;
     }
 
-    public Patient getPatient() {
+    Patient getPatient() {
         return patient;
     }
 

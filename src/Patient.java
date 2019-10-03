@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,17 +11,15 @@ public class Patient {
     private String phoneNumber;
     private List<Appointment> patientAppointments = new ArrayList<>();
 
-    public Patient(String name, String phoneNumber) {
+    Patient(String name, String phoneNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.id = ++patientCount;
     }
 
-    public int getId() {
+    int getId() {
         return id;
     }
-
-    //add disease if not already between diseases
 
     void addDisease(String disease) {
         if (diseases.contains(disease)) {
@@ -31,8 +28,6 @@ public class Patient {
             diseases.add(disease);
         }
     }
-
-    //remove disease from list if is in list
 
     void removeDisease(String disease) {
 
@@ -45,24 +40,23 @@ public class Patient {
         diseases.remove(disease);
     }
 
-    void removeAllDiseases(){
-        diseases.clear();
-
-    }
-
     List<Appointment> getPatientAppointments() {
         return patientAppointments;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    boolean appointmentCanBeDone(LocalDateTime localDateTime){
+    void deleteAppointment(Appointment appointment){
+        this.patientAppointments.remove(appointment);
+    }
+
+    String getName() {
+        return name;
+    }
+
+    boolean isFree(LocalDateTime localDateTime){
         for (Appointment appointment:patientAppointments
              ) {
             if (localDateTime.toLocalTime().isAfter(appointment.getLocalDateTime().toLocalTime().minusMinutes(60))&&localDateTime.toLocalTime().isBefore(appointment.getLocalDateTime().toLocalTime().plusMinutes(60))){
@@ -83,27 +77,14 @@ public class Patient {
     }
 
     void printAppointments(){
+        if (this.patientAppointments.size() == 0){
+            System.out.println("No appointments for this patient yet!");
+            return;
+        }
         for (Appointment appointment:patientAppointments
              ) {
             System.out.println(appointment);
         }
-    }
-
-    void deleteAppointment(int id){
-        for (Appointment appointment:patientAppointments
-             ) {
-            if (appointment.getId() == id){
-                appointment.getClinic().getClinicAppointments().remove(appointment);
-                appointment.getDoctor().getDoctorAppointments().remove(appointment);
-                patientAppointments.remove(appointment);
-                return;
-            }
-        }
-        System.out.println("No such appointmnet!");
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     @Override

@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,32 +17,16 @@ public class Clinic {
         this.id = ++countClinic;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public boolean hasCoffee() {
+    boolean hasCoffee() {
         return (this.hasCoffee);
     }
 
-    public void setHasCoffe(boolean hasCoffe) {
+    void setHasCoffe(boolean hasCoffe) {
         this.hasCoffee = hasCoffe;
-    }
-
-    //verify if number of appointments in a day is less than capacity
-
-    boolean isRoomForAppointment(LocalDate localDate) {
-
-        int numberOfAppointmentsPerDay = 0;
-
-        for (Appointment appointment : clinicAppointments
-        ) {
-            if (appointment.getLocalDateTime().toLocalDate().equals(localDate)) {
-                numberOfAppointmentsPerDay++;
-            }
-        }
-        return (numberOfAppointmentsPerDay < capacity);
-
     }
 
     List<Appointment> getClinicAppointments() {
@@ -55,24 +38,31 @@ public class Clinic {
     }
 
     void setCapacity(int capacity) {
+
+        if (capacity < 6 || capacity > 200) {
+            System.out.println("The capacity must be between 6 and 200.");
+            return;
+        }
+
         this.capacity = capacity;
+    }
+
+    boolean isAvailableOnDate(Doctor doctor, LocalDate date){
+        if (doctor.getAppointmentsOnDate(date).size() == doctor.getMaxAppointments()){
+            if (this.hasCoffee()){
+                return true;
+            }
+        }
+        else {
+            if (this.getAppointmentsOnDate(date).size()<this.capacity){
+                return true;
+            }
+        }
+        return false;
     }
 
     int getId() {
         return id;
-    }
-
-    void deleteAppointment(int id){
-        for (Appointment appointment:clinicAppointments
-        ) {
-            if (appointment.getId() == id){
-                appointment.getDoctor().getDoctorAppointments().remove(appointment);
-                appointment.getPatient().getPatientAppointments().remove(appointment);
-                clinicAppointments.remove(appointment);
-                return;
-            }
-        }
-        System.out.println("No such appointment!");
     }
 
     void printAppointments(){
@@ -80,6 +70,10 @@ public class Clinic {
              ) {
             System.out.println(appointment);
         }
+    }
+
+    void deleteAppointment(Appointment appointment){
+        this.clinicAppointments.remove(appointment);
     }
 
     List<Appointment> getAppointmentsOnDate(LocalDate date){
@@ -93,6 +87,8 @@ public class Clinic {
         }
         return appointmentsOnDate;
     }
+
+
 
     @Override
     public String toString() {

@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -24,30 +23,38 @@ public class Doctor {
         this.id = ++doctorCount;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setMaxAppointments(int maxAppointments) {
-        this.maxAppointments = maxAppointments;
+    public int getMaxAppointments() {
+        return maxAppointments;
     }
 
-    public int getId() {
+    public boolean isFreeOnThisHour(LocalDateTime localDateTime){
+        for (Appointment appointment:this.getAppointmentsOnDate(localDateTime.toLocalDate())
+        ) {
+            if (((localDateTime.toLocalTime().isAfter(appointment.getLocalDateTime().toLocalTime().minusHours(1)))) && ((localDateTime.toLocalTime().isBefore(appointment.getLocalDateTime().toLocalTime().plusHours(1))))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    int getId() {
         return id;
     }
 
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
-    }
-
-    public List<Appointment> getDoctorAppointments() {
+    List<Appointment> getDoctorAppointments() {
         return doctorAppointments;
     }
 
     void deleteAppointment(Appointment appointment) {
 
-        appointment.getClinic().getClinicAppointments().remove(appointment);
-        appointment.getPatient().getPatientAppointments().remove(appointment);
         doctorAppointments.remove(appointment);
 
     }
@@ -62,21 +69,6 @@ public class Doctor {
         }
         return appointmentsOnDate;
     }
-
-    //Verify if the doctor is available on a certain hour so appointment can be made. The distance between appointments
-    // has to be minimum 60 minutes
-
-    boolean isAvailableOnHour(LocalDate localDate, LocalTime localTime) {
-        for (Appointment appointment : getAppointmentsOnDate(localDate)
-        ) {
-            if (Duration.between(appointment.getLocalDateTime().toLocalTime(), localTime).toMinutes() < 60) {
-                return false;
-            }
-        }
-        return true;
-    }
-    //Verify if the doctor is available on a certain day so an appointment can be made. Also checks if the doctor
-    // has coffee in all clinics so he can consult 3 patients in that day.
 
     boolean isAvailableOnDate(LocalDate localDate) {
         List<Appointment> appointmentsOnDate = getAppointmentsOnDate(localDate);
@@ -95,6 +87,16 @@ public class Doctor {
             return (appointmentsOnDate.size() == numberOfCoffes);
         }
         return true;
+    }
+
+    void printAppointments(){
+        if (this.doctorAppointments.size() == 0 ){
+            System.out.println("No appointments for this doctor yet!");
+        }
+        for (Appointment appointment:this.doctorAppointments
+             ) {
+            System.out.println(appointment);
+        }
     }
 
     @Override
