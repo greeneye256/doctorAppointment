@@ -17,6 +17,8 @@ public class Appointment {
         this.id = ++countAppointments;
     }
 
+
+
     int getId() {
         return id;
     }

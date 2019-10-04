@@ -1,6 +1,5 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +26,11 @@ public class Doctor {
         return name;
     }
 
-    public int getMaxAppointments() {
+    int getMaxAppointments() {
         return maxAppointments;
     }
 
-    public boolean isFreeOnThisHour(LocalDateTime localDateTime){
+    boolean isFreeOnThisHour(LocalDateTime localDateTime){
         for (Appointment appointment:this.getAppointmentsOnDate(localDateTime.toLocalDate())
         ) {
             if (((localDateTime.toLocalTime().isAfter(appointment.getLocalDateTime().toLocalTime().minusHours(1)))) && ((localDateTime.toLocalTime().isBefore(appointment.getLocalDateTime().toLocalTime().plusHours(1))))){
@@ -41,7 +40,7 @@ public class Doctor {
         return true;
     }
 
-    public String getPhoneNumber() {
+    String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -87,6 +86,10 @@ public class Doctor {
             return (appointmentsOnDate.size() == numberOfCoffes);
         }
         return true;
+    }
+
+    void addAppointment(Appointment appointment){
+        this.doctorAppointments.add(appointment);
     }
 
     void printAppointments(){

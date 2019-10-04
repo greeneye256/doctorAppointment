@@ -20,10 +20,17 @@ class MedicalServices {
         return clinics;
     }
 
+    void addClinic(Clinic clinic){
+        if (clinic == null){
+            return;
+        }
+        this.clinics.add(clinic);
+    }
+
     private boolean isDuplicate(Doctor doctorToCheck){
         for (Doctor doctor:this.doctors
              ) {
-            if (doctor.getPhoneNumber() == doctorToCheck.getPhoneNumber()){
+            if (doctor.getPhoneNumber().equals(doctorToCheck.getPhoneNumber())){
                 return true;
             }
         }
@@ -33,7 +40,7 @@ class MedicalServices {
     private boolean isDuplicate(Patient patientToCheck){
         for (Patient patient:this.patients
              ) {
-            if (patient.getPhoneNumber() == patientToCheck.getPhoneNumber()){
+            if (patient.getPhoneNumber().equals(patientToCheck.getPhoneNumber())){
                 return true;
             }
         }
@@ -62,6 +69,12 @@ class MedicalServices {
             return null;
         }
         return clinicsAvailableOnDate;
+    }
+
+    void addAppointmentToDoctorPatientClinic(Appointment appointment){
+        appointment.getClinic().addAppointment(appointment);
+        appointment.getDoctor().addAppointment(appointment);
+        appointment.getPatient().addAppointment(appointment);
     }
 
     void addDoctor(Doctor doctor){

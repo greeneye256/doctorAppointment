@@ -88,6 +88,10 @@ public class Clinic {
         return appointmentsOnDate;
     }
 
+    void addAppointment(Appointment appointment){
+        this.clinicAppointments.add(appointment);
+    }
+
 
 
     @Override

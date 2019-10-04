@@ -44,7 +44,7 @@ public class Patient {
         return patientAppointments;
     }
 
-    public String getPhoneNumber() {
+    String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -85,6 +85,10 @@ public class Patient {
              ) {
             System.out.println(appointment);
         }
+    }
+
+    void addAppointment(Appointment appointment){
+        this.patientAppointments.add(appointment);
     }
 
     @Override
