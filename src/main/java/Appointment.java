@@ -35,8 +35,6 @@ public class Appointment {
         return patient;
     }
 
-
-
     LocalDateTime getLocalDateTime() {
         return localDateTime;
     }

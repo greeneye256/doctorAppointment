@@ -89,6 +89,9 @@ public class Doctor {
     }
 
     void addAppointment(Appointment appointment){
+        if (appointment == null){
+            return;
+        }
         this.doctorAppointments.add(appointment);
     }
 
